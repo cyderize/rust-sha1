@@ -18,10 +18,10 @@
 #![experimental]
 
 use std::io::{MemWriter, BufWriter};
-
+use std::iter::repeat;
 
 /// Represents a Sha1 hash object in memory.
-#[deriving(Clone)]
+#[derive(Clone)]
 pub struct Sha1 {
     state: [u32; 5],
     data: Vec<u8>,
@@ -58,9 +58,9 @@ impl Sha1 {
         let mut words = [0u32; 80];
         for (i, chunk) in block.chunks(4).enumerate() {
             words[i] = (chunk[3] as u32) |
-                       (chunk[2] as u32 << 8) |
-                       (chunk[1] as u32 << 16) |
-                       (chunk[0] as u32 << 24);
+                       ((chunk[2] as u32) << 8) |
+                       ((chunk[1] as u32) << 16) |
+                       ((chunk[0] as u32) << 24);
         }
 
         let ff = |b: u32, c: u32, d: u32| d ^ (b & (c ^ d));
@@ -146,7 +146,8 @@ impl Sha1 {
         w.write(self.data[]);
         w.write_u8(0x80 as u8);
         let padding = (((56 - self.len as int - 1) % 64) + 64) % 64;
-        w.write(Vec::from_elem(padding as uint, 0u8)[]);
+        let zeroes: Vec<u8> = repeat(0).take(padding as uint).collect();
+		w.write(zeroes[]);
         w.write_be_u64(self.len * 8);
         for chunk in w.get_ref()[].chunks(64) {
             m.process_block(chunk);
@@ -160,7 +161,7 @@ impl Sha1 {
 
     /// Shortcut for getting `output` into a new vector.
     pub fn digest(&self) -> Vec<u8> {
-        let mut buf = Vec::from_elem(20, 0u8);
+        let mut buf: Vec<u8> = repeat(0).take(20).collect();
         self.output(buf.as_mut_slice());
         buf
     }
