@@ -23,12 +23,12 @@ use std::io::{MemWriter, BufWriter};
 /// Represents a Sha1 hash object in memory.
 #[deriving(Clone)]
 pub struct Sha1 {
-    state: [u32, ..5],
+    state: [u32; 5],
     data: Vec<u8>,
     len: u64,
 }
 
-const DEFAULT_STATE : [u32, ..5] =
+const DEFAULT_STATE : [u32; 5] =
     [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0];
 
 
@@ -55,7 +55,7 @@ impl Sha1 {
     fn process_block(&mut self, block: &[u8]) {
         assert_eq!(block.len(), 64);
 
-        let mut words = [0u32, ..80];
+        let mut words = [0u32; .80];
         for (i, chunk) in block.chunks(4).enumerate() {
             words[i] = (chunk[3] as u32) |
                        (chunk[2] as u32 << 8) |
