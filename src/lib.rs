@@ -55,7 +55,7 @@ impl Sha1 {
     fn process_block(&mut self, block: &[u8]) {
         assert_eq!(block.len(), 64);
 
-        let mut words = [0u32; .80];
+        let mut words = [0u32; 80];
         for (i, chunk) in block.chunks(4).enumerate() {
             words[i] = (chunk[3] as u32) |
                        (chunk[2] as u32 << 8) |
