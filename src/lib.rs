@@ -63,12 +63,12 @@ impl Sha1 {
                        ((chunk[0] as u32) << 24);
         }
 
-        let ff = |b: u32, c: u32, d: u32| d ^ (b & (c ^ d));
-        let gg = |b: u32, c: u32, d: u32| b ^ c ^ d;
-        let hh = |b: u32, c: u32, d: u32| (b & c) | (d & (b | c));
-        let ii = |b: u32, c: u32, d: u32| b ^ c ^ d;
+        let ff = |&: b: u32, c: u32, d: u32| d ^ (b & (c ^ d));
+        let gg = |&: b: u32, c: u32, d: u32| b ^ c ^ d;
+        let hh = |&: b: u32, c: u32, d: u32| (b & c) | (d & (b | c));
+        let ii = |&: b: u32, c: u32, d: u32| b ^ c ^ d;
 
-        let left_rotate = |x: u32, n: u32| (x << n as uint) | (x >> (32 - n) as uint);
+        let left_rotate = |&: x: u32, n: u32| (x << n as uint) | (x >> (32 - n) as uint);
 
         for i in range(16u, 80u) {
             let n = words[i - 3] ^ words[i - 8] ^ words[i - 14] ^ words[i - 16];
